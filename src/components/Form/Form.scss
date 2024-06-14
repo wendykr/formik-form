@@ -1,0 +1,94 @@
+.form {
+  margin-top: 24px;
+  padding: 24px;
+  background-color: #ffffff;
+
+  &__row {
+    margin-bottom: 40px;
+  }
+}
+
+.legend {
+  margin-bottom: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06rem;
+  color: #f4742b;
+  text-align: left;
+}
+
+.label,
+.input,
+.select,
+.textarea {
+  width: 100%;
+  display: block;
+}
+
+.input,
+.select,
+.textarea {
+  padding: 10px;
+  width: 100%;
+  display: block;
+  border: 1px solid #d1d0cf;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  border: 1px solid #a7a6a4;
+  outline: 0px;
+}
+
+.label {
+  margin-bottom: 16px;
+  font-size: 14px;
+  text-align: left;
+}
+
+.input,
+.select,
+.textarea {
+  margin-top: 4px;
+  font-size: 16px;
+}
+
+.select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%23f4742b" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right center;
+}
+
+.textarea {
+  width: 100%;
+}
+
+.flex {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+}
+
+.button {
+  padding: 14px 24px;
+  background-color: #f4742b;
+  color: #ffffff;
+  border: none;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f6894b;
+  }
+}
+
+.newsletter-flex {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}

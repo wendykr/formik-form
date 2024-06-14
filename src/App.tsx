@@ -1,10 +1,12 @@
 import './App.scss';
+import { Form } from './components/Form/Form';
 
 function App() {
   return (
-    <>
-      <h1>Formik Form</h1>
-    </>
+    <div className="container">
+      <h1 className="title">Registrační formulář</h1>
+      <Form />
+    </div>
   );
 }
 
