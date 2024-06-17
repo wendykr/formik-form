@@ -1,6 +1,6 @@
 import { FormDataStructure } from '../../models/FormDataStructure';
 import './Registration.scss';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
+import { Formik, Field, Form, ErrorMessage, FormikProps } from 'formik';
 
 type FormDataErrorStructure = Partial<FormDataStructure>;
 
@@ -8,8 +8,12 @@ export const Registration = () => {
   const validate = (values: FormDataStructure) => {
     const errors: FormDataErrorStructure = {};
 
+    const emailRegex = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
+
     if (!values.email) {
       errors.email = 'Povinné pole!';
+    } else if (!emailRegex.test(values.email)) {
+      errors.email = 'Neplatný formát emailu.';
     } else if (values.email.length > 30) {
       errors.email = 'Max. 30 znaků';
     }
@@ -33,10 +37,10 @@ export const Registration = () => {
       errors.confirmPassword = 'Hesla se neshodují!';
     }
 
-    if (!values.phone.trim()) {
+    if (!values.phone) {
       errors.phone = 'Povinné pole!';
-    } else if (values.phone.length > 9) {
-      errors.phone = 'Max. 9 znaků';
+    } else if (!/^\d{9}$/.test(values.phone)) {
+      errors.phone = 'Neplatný formát čísla';
     }
 
     if (!values.fullName) {
@@ -83,7 +87,7 @@ export const Registration = () => {
         pickupLocation: '',
         newsletter: 'no',
         comments: '',
-        consent: false,
+        consent: '',
       }}
       validate={validate}
       onSubmit={(values, { setSubmitting, resetForm }) => {
@@ -91,132 +95,166 @@ export const Registration = () => {
         setSubmitting(false);
         resetForm();
       }}
-      validateOnChange={true} // default je true, nemusí tu být
-      validateOnBlur={false}
+      validateOnChange={true}
+      validateOnBlur={true}
     >
-      <Form className="form">
-        <p className="form__note">* Údaje s hvězdičkou jsou povinné</p>
-        <div className="form__row">
-          <legend className="legend">Registrační údaje</legend>
-          <label className="label" htmlFor="email">
-            Email <span className="error">*</span>{' '}
-            <ErrorMessage name="email" component="span" className="error" />
-            <Field className="input" type="email" name="email" />
-          </label>
-          <div className="flex">
-            <label className="label" htmlFor="password">
-              Heslo <span className="error">*</span>{' '}
-              <ErrorMessage
-                name="password"
-                component="span"
-                className="error"
+      {(props: FormikProps<FormDataStructure>) => (
+        <Form className="form">
+          <p className="form__note">* Údaje s hvězdičkou jsou povinné</p>
+          <div className="form__row">
+            <legend className="legend">Registrační údaje</legend>
+            <label className="label" htmlFor="email">
+              Email <span className="error">*</span>{' '}
+              <ErrorMessage name="email" component="span" className="error" />
+              <Field
+                className={`${props.touched.email && props.errors.email ? 'input-error' : ''} input`}
+                type="email"
+                name="email"
               />
-              <Field className="input" type="password" name="password" />
             </label>
-            <label className="label" htmlFor="confirmPassword">
-              Potvrzení hesla <span className="error">*</span>{' '}
-              <ErrorMessage
-                name="confirmPassword"
-                component="span"
-                className="error"
+            <div className="flex">
+              <label className="label" htmlFor="password">
+                Heslo <span className="error">*</span>{' '}
+                <ErrorMessage
+                  name="password"
+                  component="span"
+                  className="error"
+                />
+                <Field
+                  className={`${props.touched.password && props.errors.password ? 'input-error' : ''} input`}
+                  type="password"
+                  name="password"
+                />
+              </label>
+              <label className="label" htmlFor="confirmPassword">
+                Potvrzení hesla <span className="error">*</span>{' '}
+                <ErrorMessage
+                  name="confirmPassword"
+                  component="span"
+                  className="error"
+                />
+                <Field
+                  className={`${props.touched.confirmPassword && props.errors.confirmPassword ? 'input-error' : ''} input`}
+                  type="password"
+                  name="confirmPassword"
+                />
+              </label>
+            </div>
+
+            <label className="label" htmlFor="phone">
+              Telefon <span className="error">*</span>{' '}
+              <ErrorMessage name="phone" component="span" className="error" />
+              <Field
+                className={`${props.touched.phone && props.errors.phone ? 'input-error' : ''} input`}
+                type="tel"
+                name="phone"
               />
-              <Field className="input" type="password" name="confirmPassword" />
             </label>
           </div>
+          <div className="form__row">
+            <legend className="legend">Fakturační údaje</legend>
 
-          <label className="label" htmlFor="phone">
-            Telefon <span className="error">*</span>{' '}
-            <ErrorMessage name="phone" component="span" className="error" />
-            <Field className="input" type="tel" name="phone" />
-          </label>
-        </div>
-        <div className="form__row">
-          <legend className="legend">Fakturační údaje</legend>
-
-          <label className="label" htmlFor="fullName">
-            Jméno a příjmení <span className="error">*</span>{' '}
-            <ErrorMessage name="fullName" component="span" className="error" />
-            <Field className="input" type="text" name="fullName" />
-          </label>
-
-          <label className="label" htmlFor="company">
-            Název firmy
-            <Field className="input" type="text" name="company" />
-          </label>
-
-          <label className="label" htmlFor="street">
-            Ulice{' '}
-            <ErrorMessage name="street" component="span" className="error" />
-            <Field className="input" type="text" name="street" />
-          </label>
-          <div className="flex">
-            <label className="label" htmlFor="city">
-              Město{' '}
-              <ErrorMessage name="city" component="span" className="error" />
-              <Field className="input" type="text" name="city" />
-            </label>
-
-            <label className="label" htmlFor="postalCode">
-              PSČ{' '}
+            <label className="label" htmlFor="fullName">
+              Jméno a příjmení <span className="error">*</span>{' '}
               <ErrorMessage
-                name="postalCode"
+                name="fullName"
                 component="span"
                 className="error"
               />
-              <Field className="input" type="text" name="postalCode" />
+              <Field
+                className={`${props.touched.fullName && props.errors.fullName ? 'input-error' : ''} input`}
+                type="text"
+                name="fullName"
+              />
+            </label>
+
+            <label className="label" htmlFor="company">
+              Název firmy
+              <Field className="input" type="text" name="company" />
+            </label>
+
+            <label className="label" htmlFor="street">
+              Ulice{' '}
+              <ErrorMessage name="street" component="span" className="error" />
+              <Field className="input" type="text" name="street" />
+            </label>
+            <div className="flex">
+              <label className="label" htmlFor="city">
+                Město{' '}
+                <ErrorMessage name="city" component="span" className="error" />
+                <Field className="input" type="text" name="city" />
+              </label>
+
+              <label className="label" htmlFor="postalCode">
+                PSČ{' '}
+                <ErrorMessage
+                  name="postalCode"
+                  component="span"
+                  className="error"
+                />
+                <Field className="input" type="text" name="postalCode" />
+              </label>
+            </div>
+          </div>
+          <div className="form__row">
+            <legend className="legend">Ostatní</legend>
+            <label className="label" htmlFor="pickupLocation">
+              Preferované odběrné místo
+              <Field as="select" className="select" name="pickupLocation">
+                <option value="">- vyberte -</option>
+                <option value="praha">Praha</option>
+                <option value="brno">Brno</option>
+                <option value="ostrava">Ostrava</option>
+                <option value="plzen">Plzeň</option>
+                <option value="liberec">Liberec</option>
+              </Field>
+            </label>
+
+            <label className="label newsletter-flex">
+              Odběr newsletteru:{' '}
+              <label htmlFor="newsletterYes">
+                <Field type="radio" name="newsletter" value="yes" /> Ano
+              </label>
+              <label htmlFor="newsletterNo">
+                <Field type="radio" name="newsletter" value="no" /> Ne
+              </label>
+            </label>
+
+            <label className="label" htmlFor="comments">
+              Poznámka{' '}
+              <ErrorMessage
+                name="comments"
+                component="span"
+                className="error"
+              />
+              <Field
+                as="textarea"
+                className="textarea"
+                name="comments"
+                rows={5}
+              ></Field>
             </label>
           </div>
-        </div>
-        <div className="form__row">
-          <legend className="legend">Ostatní</legend>
-          <label className="label" htmlFor="pickupLocation">
-            Preferované odběrné místo
-            <Field as="select" className="select" name="pickupLocation">
-              <option value="">- vyberte -</option>
-              <option value="praha">Praha</option>
-              <option value="brno">Brno</option>
-              <option value="ostrava">Ostrava</option>
-              <option value="plzen">Plzeň</option>
-              <option value="liberec">Liberec</option>
-            </Field>
-          </label>
+          <div className="form__row">
+            <legend className="legend">Souhlas</legend>
 
-          <label className="label newsletter-flex">
-            Odběr newsletteru:{' '}
-            <label htmlFor="newsletterYes">
-              <Field type="radio" name="newsletter" value="yes" /> Ano
+            <label className="label" htmlFor="consent">
+              <Field type="checkbox" name="consent" /> Souhlasím se zpracováním
+              osobních údajů
+              <p>
+                <ErrorMessage
+                  name="consent"
+                  component="span"
+                  className="error"
+                />
+              </p>
             </label>
-            <label htmlFor="newsletterNo">
-              <Field type="radio" name="newsletter" value="no" /> Ne
-            </label>
-          </label>
-
-          <label className="label" htmlFor="comments">
-            Poznámka{' '}
-            <ErrorMessage name="comments" component="span" className="error" />
-            <Field
-              as="textarea"
-              className="textarea"
-              name="comments"
-              rows={5}
-            ></Field>
-          </label>
-        </div>
-        <div className="form__row">
-          <legend className="legend">Souhlas</legend>
-
-          <label className="label" htmlFor="consent">
-            <Field type="checkbox" name="consent" /> Souhlasím se zpracováním
-            osobních údajů
-            <p>
-              <ErrorMessage name="consent" component="span" className="error" />
-            </p>
-          </label>
-        </div>
-        <button className="button" type="submit">
-          Registrovat
-        </button>
-      </Form>
+          </div>
+          <button className="button" type="submit">
+            Registrovat
+          </button>
+        </Form>
+      )}
     </Formik>
   );
 };

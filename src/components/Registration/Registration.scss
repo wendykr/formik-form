@@ -93,11 +93,20 @@
   gap: 10px;
 }
 
-.error, .form__note {
+.error,
+.form__note {
   font-size: 14px;
   color: red;
 }
 
 .form__note {
   text-align: right;
+}
+
+.input-error {
+  border: 1px solid red;
+}
+
+.input-error:focus {
+  border: 1px solid red;
 }

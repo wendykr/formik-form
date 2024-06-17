@@ -11,5 +11,5 @@ export interface FormDataStructure {
   pickupLocation: string;
   newsletter: string;
   comments: string;
-  consent: boolean | string;
+  consent: string;
 }
