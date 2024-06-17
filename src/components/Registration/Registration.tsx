@@ -5,7 +5,6 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 type FormDataErrorStructure = Partial<FormDataStructure>;
 
 export const Registration = () => {
-
   const validate = (values: FormDataStructure) => {
     const errors: FormDataErrorStructure = {};
 
@@ -27,10 +26,17 @@ export const Registration = () => {
       errors.confirmPassword = 'Max. 50 znaků';
     }
 
-    if (!values.phone) {
+    if (
+      values.password !== values.confirmPassword &&
+      values.confirmPassword.length > 0
+    ) {
+      errors.confirmPassword = 'Hesla se neshodují!';
+    }
+
+    if (!values.phone.trim()) {
       errors.phone = 'Povinné pole!';
-    } else if (values.phone.length > 20) {
-      errors.phone = 'Max. 20 znaků';
+    } else if (values.phone.length > 9) {
+      errors.phone = 'Max. 9 znaků';
     }
 
     if (!values.fullName) {
@@ -61,7 +67,7 @@ export const Registration = () => {
     }
 
     return errors;
-  }
+  };
   return (
     <Formik
       initialValues={{
@@ -85,8 +91,8 @@ export const Registration = () => {
         setSubmitting(false);
         resetForm();
       }}
-      validateOnChange={true}
-      validateOnBlur={true}
+      validateOnChange={true} // default je true, nemusí tu být
+      validateOnBlur={false}
     >
       <Form className="form">
         <p className="form__note">* Údaje s hvězdičkou jsou povinné</p>
