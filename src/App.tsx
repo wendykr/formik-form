@@ -1,11 +1,13 @@
 import './App.scss';
-import { Form } from './components/Form/Form';
+import { Registration } from './components/Registration/Registration';
+
+
 
 function App() {
   return (
     <div className="container">
       <h1 className="title">Registrační formulář</h1>
-      <Form />
+      <Registration />
     </div>
   );
 }

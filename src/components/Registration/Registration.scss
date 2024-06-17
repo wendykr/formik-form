@@ -92,3 +92,12 @@
   flex-direction: row;
   gap: 10px;
 }
+
+.error, .form__note {
+  font-size: 14px;
+  color: red;
+}
+
+.form__note {
+  text-align: right;
+}
