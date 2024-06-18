@@ -11,7 +11,7 @@ export const Registration = () => {
     const emailRegex = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
 
     if (!values.email) {
-      errors.email = 'Povinné pole!';
+      errors.email = 'required';
     } else if (!emailRegex.test(values.email)) {
       errors.email = 'Neplatný formát emailu.';
     } else if (values.email.length > 30) {
@@ -19,13 +19,13 @@ export const Registration = () => {
     }
 
     if (!values.password) {
-      errors.password = 'Povinné pole!';
+      errors.password = 'required';
     } else if (values.password.length > 50) {
       errors.password = 'Max. 50 znaků';
     }
 
     if (!values.confirmPassword) {
-      errors.confirmPassword = 'Povinné pole!';
+      errors.confirmPassword = 'required';
     } else if (values.confirmPassword.length > 50) {
       errors.confirmPassword = 'Max. 50 znaků';
     }
@@ -38,13 +38,13 @@ export const Registration = () => {
     }
 
     if (!values.phone) {
-      errors.phone = 'Povinné pole!';
+      errors.phone = 'required';
     } else if (!/^\d{9}$/.test(values.phone)) {
       errors.phone = 'Neplatný formát čísla';
     }
 
     if (!values.fullName) {
-      errors.fullName = 'Povinné pole!';
+      errors.fullName = 'required';
     } else if (values.fullName.length > 40) {
       errors.fullName = 'Max. 40 znaků';
     }
@@ -105,7 +105,9 @@ export const Registration = () => {
             <legend className="legend">Registrační údaje</legend>
             <label className="label" htmlFor="email">
               Email <span className="error">*</span>{' '}
-              <ErrorMessage name="email" component="span" className="error" />
+              {props.errors.email !== 'required' && (
+                <ErrorMessage name="email" component="span" className="error" />
+              )}
               <Field
                 className={`${props.touched.email && props.errors.email ? 'input-error' : ''} input`}
                 type="email"
@@ -115,11 +117,13 @@ export const Registration = () => {
             <div className="flex">
               <label className="label" htmlFor="password">
                 Heslo <span className="error">*</span>{' '}
-                <ErrorMessage
-                  name="password"
-                  component="span"
-                  className="error"
-                />
+                {props.errors.password !== 'required' && (
+                  <ErrorMessage
+                    name="password"
+                    component="span"
+                    className="error"
+                  />
+                )}
                 <Field
                   className={`${props.touched.password && props.errors.password ? 'input-error' : ''} input`}
                   type="password"
@@ -128,11 +132,13 @@ export const Registration = () => {
               </label>
               <label className="label" htmlFor="confirmPassword">
                 Potvrzení hesla <span className="error">*</span>{' '}
-                <ErrorMessage
-                  name="confirmPassword"
-                  component="span"
-                  className="error"
-                />
+                {props.errors.confirmPassword !== 'required' && (
+                  <ErrorMessage
+                    name="confirmPassword"
+                    component="span"
+                    className="error"
+                  />
+                )}
                 <Field
                   className={`${props.touched.confirmPassword && props.errors.confirmPassword ? 'input-error' : ''} input`}
                   type="password"
@@ -143,7 +149,9 @@ export const Registration = () => {
 
             <label className="label" htmlFor="phone">
               Telefon <span className="error">*</span>{' '}
-              <ErrorMessage name="phone" component="span" className="error" />
+              {props.errors.phone !== 'required' && (
+                <ErrorMessage name="phone" component="span" className="error" />
+              )}
               <Field
                 className={`${props.touched.phone && props.errors.phone ? 'input-error' : ''} input`}
                 type="tel"
@@ -156,11 +164,13 @@ export const Registration = () => {
 
             <label className="label" htmlFor="fullName">
               Jméno a příjmení <span className="error">*</span>{' '}
-              <ErrorMessage
-                name="fullName"
-                component="span"
-                className="error"
-              />
+              {props.errors.fullName !== 'required' && (
+                <ErrorMessage
+                  name="fullName"
+                  component="span"
+                  className="error"
+                />
+              )}
               <Field
                 className={`${props.touched.fullName && props.errors.fullName ? 'input-error' : ''} input`}
                 type="text"
